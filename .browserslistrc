@@ -1,0 +1,31 @@
+# UNSER BROWSER-RAHMEN, entschieden am 29.08.2026 vom Inhaber.
+#
+# WARUM ES IHN GIBT: Ohne diese Datei greift die Vorgabe von Next 16
+# (chrome 111, edge 111, firefox 111, safari 16.4, Stand 01.10.2025).
+# Safari 16.4 ist von Maerz 2023; wer auf macOS Big Sur oder Monterey
+# sitzt, waere damit schon mit unserem eigenen Kode draussen. Das hatte
+# nie jemand entschieden, es war einfach die Vorgabe.
+#
+# WARUM DIESE FASSUNGEN:
+#   chrome/edge 109  letzte Fassung fuer Windows 7, 8 und 8.1 (Jan 2023)
+#   firefox 115      ESR, letzte fuer aeltere macOS- und Windows-Staende
+#   safari 15.6      laeuft auf macOS Big Sur (2020) und Monterey (2021)
+#   ios_saf 15.6     reicht zurueck bis zum iPhone 6s
+#
+# WAS ER KOSTET, gemessen an zwei vollstaendigen Bauen am 29.08.2026:
+#   alle ausgelieferten JS-Dateien  4.077 -> 4.116 kB   (+39,0 kB, +0,96 %)
+#   ein Aufruf der Startseite       1.386,5 -> 1.402,0 kB JS
+#   ein Aufruf von /login             977,2 ->   989,2 kB JS
+#
+# WAS ER NICHT LEISTET: Er steuert, wie UNSER Kode uebersetzt wird.
+# Fremde Pakete kommen fertig gebaut und halten sich an gar nichts.
+# Dagegen hilft nur scripts/sprachbausteine-pruefen.mts.
+#
+# Die menschenlesbare Fassung steht in config/sprachbausteine.ts
+# (BROWSER_RAHMEN); beide muessen dasselbe sagen.
+
+chrome 109
+edge 109
+firefox 115
+safari 15.6
+ios_saf 15.6
