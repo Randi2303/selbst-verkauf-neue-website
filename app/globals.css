@@ -1,0 +1,521 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ */
+/* Basis: warme Grundstimmung, Typografie, Fokus-Zustände             */
+/* ------------------------------------------------------------------ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+  body {
+    @apply bg-background text-ink;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    @apply bg-accent/25;
+  }
+  /* ----------------------------------------------------------------
+     DEUTSCHE WÖRTER SIND LANG, BILDSCHIRME SIND SCHMAL.
+     ----------------------------------------------------------------
+     "Markteinschätzung" braucht in einer Überschrift rund 250 px. Auf
+     einem 320 px breiten Bildschirm bleiben nach den Rändern 280 px,
+     und in einer Spalte daneben oft nur 216. Ein Wort, das nicht
+     hineinpasst, bestimmt dann die Mindestbreite seines Rasterfeldes,
+     und die ganze Seite wird seitlich verschiebbar. Genau das war am
+     13.08.2026 auf der Startseite messbar: 40 px zu breit, verursacht
+     von der Überschrift eines Ablauf-Schritts.
+
+     Deshalb DÜRFEN Überschriften trennen. Die Trennung greift nur,
+     wenn ein Wort sonst überliefe; wo der Platz reicht, ändert sich
+     nichts. Die Sprache steht am html-Element (lang="de"), sonst
+     wüsste der Browser nicht, wo er trennen darf.
+
+     break-words als zweite Sicherung für alles, was keine
+     Trennstellen hat, etwa lange Adressen oder Dateinamen. */
+  /* DIE NOTBREMSE GILT ÜBERALL, NICHT NUR IN ÜBERSCHRIFTEN
+     (Bau-Runde 5, 17.08.2026). Gemessen rutschten
+     "Wohnflächenberechnung" und "Verkehrswertgutachten" auf
+     /wunsch-paket und "Foto- und Besichtigungs-Termine" auf
+     /konto/statistiken aus ihren Kästen: alles Fließtext in schmalen
+     Kacheln, keine Überschriften. Drei Einzelreparaturen hätten das
+     vierte lange Wort wieder überlaufen lassen. overflow-wrap erbt,
+     deshalb genügt EINE Regel am body; sie greift weiterhin NUR,
+     wenn ein Wort sonst überliefe, und erfindet keinen Trennstrich. */
+  body {
+    /* NUR die Notbremse gegen Ueberbreite, keine Trennung. */
+    overflow-wrap: break-word;
+  }
+  /* Ein Platzhalter, der nicht in sein Feld passt, endet mit einem
+     Auslassungszeichen statt mitten im Wort abgeschnitten zu sein.
+     Gemessen auf /lexikon und /register bei 320 px. Die Texte selbst
+     sind zusätzlich gekürzt; diese Regel fängt den nächsten zu langen
+     Platzhalter ab, ohne dass jemand daran denken muss. */
+  input::placeholder {
+    text-overflow: ellipsis;
+  }
+  /* KEINE SILBENTRENNUNG, NIRGENDS.
+
+     Hier stand bis zum 13.08.2026 "hyphens: auto" fuer Ueberschriften
+     unter 420 px, gegen ein langes Wort, das die Seite seitlich
+     verschiebbar machte. Der Anlass war echt, das Mittel falsch:
+     Auf dem Handy trennte der Browser dann auch die Namen unserer
+     eigenen Geschaeftsfuehrer, "Hans-joerg" und "Andre-as". Ein
+     Trennstrich in einem Eigennamen sieht nicht nach Typografie aus,
+     sondern danach, dass niemand hingesehen hat.
+
+     overflow-wrap: break-word oben leistet das Noetige und ist das
+     ehrlichere Werkzeug: Es greift NUR, wenn ein Wort sonst
+     ueberliefe, und es erfindet dabei keinen Trennstrich. hyphens
+     dagegen trennt schon, wo der Platz noch reicht.
+
+     hyphens: manual am Wurzelelement ist die Absicherung: Wer die
+     Trennung kuenftig irgendwo braucht, muss sie ausdruecklich und
+     eng begrenzt einschalten. Ein globales "auto" kann nicht mehr
+     versehentlich zurueckkommen. Eigennamen, Ueberschriften und
+     schmale Spalten sind damit von sich aus geschuetzt. */
+  html {
+    hyphens: manual;
+    -webkit-hyphens: manual;
+  }
+  /* Und kein einzelnes Wort allein in der letzten Zeile.
+     Überschriften werden auf möglichst gleich lange Zeilen verteilt,
+     Fliesstext zieht bei Bedarf ein Wort aus der letzten Zeile nach
+     oben. Beides sind Empfehlungen an den Browser: Wo er sie nicht
+     kennt, bricht er wie bisher um, es geht also nichts verloren, und
+     wo der Platz reicht, ändert sich ohnehin nichts. */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  /* KEIN balance, wenn ein Symbol in der Überschrift steht
+     (Feinschliff 24.08.2026): Safari verrechnet sich bei balance mit
+     atomaren Inline-Inhalten (SVG, Bild) und bricht dann Text um,
+     der locker in eine Zeile passt. "Regelmäßige Zeiten" stand beim
+     Inhaber zweizeilig bei vollem Fenster, während Chromium und der
+     WebKit-Neubau der Messung einzeilig zeigten. Für einzeilige
+     Funktions-Überschriften leistet balance ohnehin nichts. Die
+     Bau-Messung (.pruefung/r25-ueberschriften-messen.mts) prüft
+     diese Regel als Kombination balance plus Symbol nach. */
+  h1:has(svg, img),
+  h2:has(svg, img),
+  h3:has(svg, img) {
+    text-wrap: wrap;
+  }
+  p,
+  li,
+  dd,
+  figcaption {
+    text-wrap: pretty;
+  }
+  /* Knöpfe, Links und Schalter behalten den klaren runden Ring.
+     Eingabefelder sind ausgenommen: Sie zeigen den Fokus über ihre
+     EIGENE runde Form (Petrol-Rand plus Petrol-Cursor), nie als
+     kantiges Rechteck über dem Feld. */
+  :focus-visible:where(:not(input):not(textarea):not(select)) {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+  input,
+  textarea,
+  select {
+    @apply caret-primary;
+  }
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    /* Der weiche Petrol-Rand greift überall dort, wo das Feld einen
+       eigenen Rand hat. Randlose Felder in runden Kästen melden den
+       Fokus über focus-within am Kasten (siehe Feld-Komponenten). */
+    @apply border-primary/60 outline-none;
+  }
+  /* Kein Doppeltipp-Zoom auf Bedienelementen (z. B. schnelles Tippen auf
+     den Anzahl-Stepper am Handy); Pinch-Zoom der Seite bleibt erhalten */
+  a,
+  button,
+  input,
+  select,
+  textarea,
+  label {
+    touch-action: manipulation;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Wiederkehrende Bausteine                                           */
+/* ------------------------------------------------------------------ */
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-content px-5 sm:px-8;
+  }
+  .section-pad {
+    @apply py-24 md:py-32;
+  }
+  /* Kleine Versal-Labels, die einzige erlaubte Großschreibung */
+  .eyebrow {
+    @apply text-[0.78rem] font-semibold uppercase tracking-[0.08em] text-accent-deep;
+  }
+  /* Hohe optische Größe für Fraunces in H1 und H2 */
+  .opsz-display {
+    font-variation-settings: "opsz" 132;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-primary px-7 py-3.5 text-[0.98rem] font-medium text-background shadow-soft transition-all duration-200 ease-swift;
+  }
+  .btn-primary:active {
+    @apply translate-y-0;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-primary/25 bg-transparent px-7 py-3.5 text-[0.98rem] font-medium text-primary transition-all duration-200 ease-swift;
+  }
+  /* DER EINE SCHATTEN ALLER GERAETE-BILDER (Inhaber, Runde 31: ein
+     Schatten fuer alle, eine Stelle im Kode). drop-shadow statt
+     box-shadow: Er folgt der FORM des freigestellten Geraets, nie dem
+     Rechteck der Datei. Licht wie ueberall von oben links.
+
+     ZWEI FASSUNGEN IN EINER KLASSE, und der Grund ist Safari
+     (Inhaber-Befund 26.08.2026, Geometrie gemessen): Safari zaehlt
+     die MALFLAECHE von Filter-Schatten zum scrollbaren Bereich,
+     Chrome nicht. Malt der Schatten ueber die Fensterkante, laesst
+     sich die Seite in Safari seitlich schieben. Die Malflaeche
+     reicht Versatz plus dreifache Streuung nach rechts: unten die
+     enge, mittige Fassung (27 px), ab 1024 die volle (63 px), und
+     die Einrueckungen im Band 1024 bis 1279 (Hero, Anfragen) halten
+     sie dort im Fenster. Wer Werte aendert, rechnet die Reichweite
+     nach und haelt sie kleiner als den kleinsten Randabstand der
+     Geraete. */
+  .geraete-schatten {
+    filter: drop-shadow(0 2px 4px rgba(35, 39, 42, 0.1))
+      drop-shadow(0 14px 18px rgba(35, 39, 42, 0.2));
+  }
+  @media (min-width: 1024px) {
+    .geraete-schatten {
+      filter: drop-shadow(0 2px 5px rgba(35, 39, 42, 0.1))
+        drop-shadow(12px 32px 34px rgba(35, 39, 42, 0.22));
+    }
+  }
+  /* Kaum merkliches Schweben des Hero-MacBooks (Inhaber, 26.08.2026):
+     wenige Pixel, langsam, dauerhaft. Reines CSS auf dem BILD, nicht
+     auf seinem Platz: kein Umbruch daneben, nichts startet unsichtbar,
+     und der drop-shadow haengt am Element und geht mit. Bei
+     reduzierter Bewegung laeuft nichts. */
+  .geraete-schwebt {
+    animation: geraete-schweben 7s ease-in-out infinite;
+  }
+  /* DAS AUFRICHTEN DES HERO-GERAETS (Inhaber, 26.08.2026), mit vier
+     Auflagen: im Server-HTML sichtbar mit voller Deckkraft (hier ist
+     bewusst KEINE Deckkraft im Spiel, die Zaehlung unsichtbar
+     startender Elemente bleibt unberuehrt), NUR Bewegung
+     (ausschliesslich transform), der Platz veraendert sich nicht
+     (transform malt nur, das Layout bleibt exakt), und es laeuft
+     ZUSAMMEN mit dem Schweben, nicht statt dessen: Das Aufrichten
+     liegt auf dem Zwischen-Wrapper im Hero, das Schweben auf dem
+     Bild, zwei Elemente, kein Transform-Konflikt. Reine
+     CSS-Animation, laeuft auch ohne JavaScript und ist damit
+     hydrationsneutral. backwards: Waehrend der Startverzoegerung
+     gilt bereits die Ausgangslage, sonst spraenge das Bild beim
+     Anlauf. Der Fusspunkt bleibt unten (transform-origin), das
+     Geraet kommt ein kleines Stueck herauf und stellt sich aus
+     leichter Ruecklage auf. */
+  .geraete-aufrichten {
+    transform-origin: center bottom;
+    animation: geraete-aufrichten 0.9s cubic-bezier(0.23, 1, 0.32, 1) 0.3s backwards;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .geraete-schwebt,
+    .geraete-aufrichten {
+      animation: none;
+    }
+  }
+  /* Hover nur auf Geräten mit Maus */
+  @media (hover: hover) {
+    .btn-primary:hover {
+      @apply -translate-y-0.5 bg-primary-dark shadow-lift;
+    }
+    .btn-secondary:hover {
+      @apply -translate-y-0.5 border-primary/60 bg-surface-tint;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Umschalten der Farbfassung: weich und einheitlich                  */
+/* ------------------------------------------------------------------ */
+/* Das Problem ist nicht der Übergang an sich, sondern seine
+   Ungleichheit: Viele Bausteine tragen transition-colors mit 0,15
+   Sekunden, andere gar keinen Übergang. Wechselt man die Fassung,
+   läuft eine Welle durch die Seite statt eines Wechsels.
+
+   Deshalb bekommt für die Dauer des Wechsels JEDES Element denselben
+   Übergang aufgezwungen, gleiche Dauer und gleiche Kurve. Danach fällt
+   alles auf sein normales Verhalten zurück.
+
+   Die Klasse setzt ausschließlich der Schalter, nie das Laden der
+   Seite. Beim Aufbau steht die Fassung bereits im HTML, dort gibt es
+   nichts zu überblenden.
+
+   !important ist hier nötig, sonst gewinnen die Utilities der
+   einzelnen Bausteine und die Ungleichheit bleibt. */
+.farbwechsel,
+.farbwechsel *,
+.farbwechsel *::before,
+.farbwechsel *::after {
+  transition-property: background-color, border-color, color, fill, stroke,
+    box-shadow, outline-color, text-decoration-color !important;
+  transition-duration: 280ms !important;
+  transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1) !important;
+  transition-delay: 0s !important;
+}
+
+/* Wer Bewegung reduziert haben möchte, bekommt den harten Wechsel.
+   Das ist hier die richtige Antwort: Der Übergang ist Komfort, keine
+   Information, es geht also nichts verloren. */
+@media (prefers-reduced-motion: reduce) {
+  .farbwechsel,
+  .farbwechsel *,
+  .farbwechsel *::before,
+  .farbwechsel *::after {
+    transition: none !important;
+  }
+}
+
+@layer utilities {
+  /* Gestaffeltes Einfaden beim Laden (Hero). Läuft rein über CSS,     */
+  /* damit Inhalte auch bei langsamem JavaScript nie versteckt bleiben. */
+  .anim-rise {
+    opacity: 0;
+    transform: translateY(26px);
+    animation: rise 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    animation-delay: var(--rise-delay, 0s);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .anim-rise {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+  /* Warmer, leicht entsättigter Foto-Look */
+  .foto-warm {
+    filter: saturate(0.88) sepia(0.06) contrast(0.98);
+  }
+}
+
+@keyframes rise {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes geraete-schweben {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes geraete-aufrichten {
+  from {
+    transform: perspective(1200px) translateY(22px) rotateX(7deg);
+  }
+  to {
+    transform: perspective(1200px) translateY(0) rotateX(0);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Lenis (sanftes Scrollen)                                           */
+/* ------------------------------------------------------------------ */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------------ */
+/* Preis-Slider im Ersparnis-Rechner                                  */
+/* ------------------------------------------------------------------ */
+.price-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 9999px;
+  cursor: pointer;
+  outline-offset: 6px;
+}
+/* Hier stand theme(colors.primary.DEFAULT). Seit die Token CSS-Variablen
+   sind, würde theme() den Platzhalter <alpha-value> mit in die Datei
+   schreiben und der Wert wäre ungültig. Direkter Zugriff auf die
+   Variable, ohne Deckkraft-Zusatz. */
+.price-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 28px;
+  width: 28px;
+  margin-top: -10px;
+  border-radius: 9999px;
+  background: rgb(var(--farbe-primary));
+  border: 5px solid rgb(var(--farbe-paper));
+  box-shadow: 0 2px 8px rgb(var(--farbe-schatten) / 0.28);
+  transition: transform 0.15s ease;
+}
+.price-slider::-moz-range-thumb {
+  height: 28px;
+  width: 28px;
+  border-radius: 9999px;
+  background: rgb(var(--farbe-primary));
+  border: 5px solid rgb(var(--farbe-paper));
+  box-shadow: 0 2px 8px rgb(var(--farbe-schatten) / 0.28);
+}
+@media (hover: hover) {
+  .price-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.08);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Kleine Loop-Animationen (Chat-Tippen, sanfter Puls)                */
+/* ------------------------------------------------------------------ */
+/* DIE EINE PUNKTE-ANZEIGE DES HAUSES: im Telefon-Ausschnitt der
+   Startseite (mit der Schaufenster-Runde gefallen, im Feinschliff am
+   24.08.2026 auf Wunsch des Inhabers zurückgeholt) und seit Runde 19
+   im Assistenten, während seine Antwort entsteht.
+
+   OHNE HÜPFEN, geändert am 21.08.2026 auf Auflage des Inhabers ("ruhig,
+   klein, in unseren Farben, kein Hüpfen"). Vorher hoben sich die Punkte
+   um zwei Pixel. Ein springender Punkt zieht den Blick dauernd zurück,
+   und im Assistenten steht er neben einem Text, den man gerade liest.
+   Die Helligkeit allein trägt die Bewegung genauso. */
+.typing-dot {
+  animation: typing-blink 1.2s ease-in-out infinite;
+}
+@keyframes typing-blink {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+.pulse-soft {
+  animation: pulse-soft 2.6s ease-in-out infinite;
+}
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .typing-dot,
+  .pulse-soft {
+    animation: none;
+  }
+}
+
+/* ====================================================================
+   ENTWURF: EINE SCHRIFT IN DER ANWENDUNG (Runde 37, 29.08.2026)
+   ====================================================================
+
+   DAS IST DIE EINE STELLE. Es gibt keine zweite Liste und keinen
+   Sonderfall in einem einzelnen Baustein.
+
+   ZURÜCKDREHEN: Diesen Block löschen. Sonst nichts. Die Familie
+   `heading` in tailwind.config.ts fällt dann von selbst auf ihren
+   Rückfall zurück (Fraunces, Georgia, serif), und die Merkmale
+   `data-bereich="anwendung"` an den beiden Hüllen sind ohne diesen
+   Block wirkungslos. Vollständig aufgeräumt wird zusätzlich das
+   Merkmal aus KontoShell und AdminShell entfernt und die Wortmarke
+   von `font-marke` auf `font-heading` zurückgesetzt.
+
+   WARUM ZWEI WÄHLER JE REGEL
+   --------------------------
+   `[data-bereich="anwendung"]` deckt den Seitenbaum ab.
+   `body:has([data-bereich="anwendung"])` deckt zusätzlich die
+   PORTALE ab. Modal, Sheet und Dropdown hängen sich an `document.body`
+   und stehen damit AUSSERHALB der Hülle; ohne den zweiten Wähler
+   behielten Dialoge im Konto die Serifenschrift, während die Seite
+   dahinter schon die neue trüge. Über `body` erbt auch das Portal.
+
+   Die öffentliche Website trägt das Merkmal nirgends und bleibt damit
+   unberührt, auch dort, wo sie DENSELBEN Baustein benutzt: Ein Sheet,
+   das aus /wunsch-paket aufgeht, findet kein Merkmal und bleibt
+   Fraunces. Ein Sheet im Konto findet es und wird Inter.
+
+   DIE UNTERSCHEIDUNG OHNE ZWEITE SCHRIFT
+   --------------------------------------
+   Trägt alles dieselbe Familie, entsteht der Unterschied zwischen
+   Überschrift und Fließtext nicht mehr von selbst. Er kommt hier aus
+   drei Mitteln, und alle drei wirken zusammen:
+
+   1. STRICHSTÄRKE 680 statt 600. Inter ist als variable Schrift
+      geladen, die Achse ist stufenlos; 680 gibt es als feste Schnitte
+      gar nicht. Gegen den Fließtext mit 400 sind das 280 Einheiten
+      Abstand statt 200. 700 wäre zu laut für eine Maske, 650 zu wenig.
+   2. LAUFWEITE -0.018em. Enger gesetzte Überschriften über normal
+      gesetztem Fließtext ergeben zwei erkennbar verschiedene Register.
+      Bei Inter ist das zugleich der optisch richtige Ausgleich: Die
+      Schrift ist für Fließtext ausgelegt und läuft in halbfett und
+      größer sonst zu weit.
+   3. FARBE UND GRÖSSE, die es schon gab. Überschriften stehen in
+      `text-ink`, der Fließtext daneben oft in `text-ink-muted`, und
+      die Größenstufen der Anwendung (1,05 / 1,15 / 1,35 / 1,6 rem
+      gegen rund 0,9 rem Fließtext) sind unverändert geblieben. Diese
+      beiden Mittel trugen die Unterscheidung schon vorher mit; ohne
+      sie reichten Stärke und Laufweite allein nicht.
+
+   VERWORFEN, UND ZWAR GEMESSEN: die optische Größe.
+   -------------------------------------------------
+   Inter bringt eine opsz-Achse mit (14 bis 32), und eine Überschrift
+   mit opsz 28 wäre eine echte Display-Fassung derselben Familie
+   gewesen: engere Formen, kleinere Punzen, also ein Unterschied in der
+   FORM statt nur im Gewicht. Das wäre das stärkste Mittel gewesen.
+
+   Es geht nicht. Wer die Achse über next/font anfordert, schaltet
+   damit `font-optical-sizing: auto` für die GANZE Seite scharf, auch
+   für die öffentliche. Gemessen am 29.08.2026 mit
+   scripts/schrift-oeffentlich-messen.mts: 196 von 943 Textelementen
+   auf Startseite, Leistungen, Team, Lexikon, Impressum und
+   Datenschutz verschieben sich, ein Absatz auf /team fällt von fünf
+   auf vier Zeilen. Die Auflage lautet, dass die öffentliche Website
+   unverändert bleibt. Also bleibt die Achse ungefordert.
+
+   Nicht angefasst sind außerdem Schriftgröße und Zeilenhöhe. Beide
+   stehen in den Bausteinen, beide bestimmen den Umbruch, und ein
+   zentraler Eingriff hätte in schmalen Kacheln Folgen, die diese
+   Runde nicht überblickt.
+   ==================================================================== */
+
+[data-bereich="anwendung"],
+body:has([data-bereich="anwendung"]) {
+  --schrift-ueberschrift: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+[data-bereich="anwendung"] .font-heading,
+body:has([data-bereich="anwendung"]) .font-heading {
+  font-weight: 680;
+  letter-spacing: -0.018em;
+}
