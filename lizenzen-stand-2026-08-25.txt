@@ -1,0 +1,83 @@
+Lizenz-Stand des Projekts selbst-verkauf.de
+Erhoben am 25.08.2026 aus den installierten Paketen unter node_modules.
+Gelesen wurde je Paket die Lizenzangabe in der package.json, nicht die
+Lizenzdatei im Volltext. Massgeblich fuer den Stand ist package-lock.json.
+
+======================================================================
+1. ZUSAMMENFASSUNG NACH LIZENZ
+======================================================================
+
+    588 MIT
+     40 ISC
+     35 Apache-2.0
+      9 BSD-2-Clause
+      6 BSD-3-Clause
+      3 CC0-1.0
+      2 MPL-2.0
+      2 BlueOak-1.0.0
+      2 0BSD
+      1 Standard 'no charge' license: https://gsap.com/standard-license.
+      1 Python-2.0
+      1 LGPL-3.0-or-later
+      1 LGPL-3.0
+      1 CC-BY-4.0
+      1 (MIT AND Zlib)
+
+======================================================================
+2. BEFUND ZU DEN KRITISCHEN LIZENZEN
+======================================================================
+
+AGPL: 0 verschiedene Lizenzangaben gefunden
+SSPL: 0 verschiedene Lizenzangaben gefunden
+BUSL: 0 verschiedene Lizenzangaben gefunden
+GPL ohne L davor: 0 verschiedene Lizenzangaben gefunden
+
+Alle vier stehen auf null. Das sind die Lizenzen, die bei einem
+Dienst im Netz gefaehrlich werden, weil bei ihnen bereits die
+Benutzung ueber das Netz eine Offenlegung ausloesen kann.
+
+LGPL ist etwas anderes und kommt zweimal vor, siehe unten und
+einzeln begruendet in LIZENZEN.md.
+
+======================================================================
+3. PAKETE MIT AUFLAGEN, NAMENTLICH
+======================================================================
+
+--- LGPL-3.0 ---
+libheif-js
+
+--- LGPL-3.0-or-later ---
+@img/sharp-libvips-darwin-arm64
+
+--- MPL-2.0 ---
+axe-core
+next/dist/compiled/@vercel/og
+
+--- CC-BY-4.0 ---
+caniuse-lite
+
+--- CC0-1.0 ---
+language-subtag-registry
+next/dist/compiled/postcss-preset-env
+next/dist/compiled/string-hash
+
+--- Python-2.0 ---
+argparse
+
+--- GSAP (eigene Lizenz, kein Open Source) ---
+gsap 3.15.0
+Nachgelesen an der Quelle am 25.08.2026: seit 30.05.2025 kostenlos,
+auch kommerziell, einschliesslich der frueher kostenpflichtigen
+Erweiterungen. Verboten ist allein der Bau eines visuellen
+Animations-Werkzeugs, das Webflow Konkurrenz macht.
+https://gsap.com/community/standard-license/
+
+======================================================================
+4. WAS DIESE AUFSTELLUNG NICHT SAGT
+======================================================================
+
+Sie liest die Lizenzangabe, die ein Paket ueber sich selbst macht.
+Sie prueft nicht, ob diese Angabe stimmt, und sie liest keine
+Lizenzdateien im Volltext. Ein Paket mit mehreren Lizenzen zur Wahl
+erscheint hier nur mit der Zeile, die in der package.json steht.
+Nach jeder groesseren Paket-Aenderung gehoert der Lauf wiederholt.

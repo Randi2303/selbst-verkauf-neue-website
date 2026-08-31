@@ -1,0 +1,5 @@
+Hier die Partner-Bilder ablegen:
+- hansjoerg-niermann.webp (quadratisch oder 4:5, mindestens 800 px breit)
+- andreas-hanneken.webp (quadratisch oder 4:5, mindestens 800 px breit)
+- werteimmobilien-logo.png (transparentes Logo, optional)
+Danach neu bauen bzw. deployen, die Seite bindet sie automatisch ein.

@@ -1,0 +1,295 @@
+Bitte zuerst lesen
+
+Willkommen. In diesem Ordner liegt die heutige Website von
+selbst-verkauf.de. Sie ist Ihr Ausgangspunkt, nicht Ihre Vorgabe.
+
+Sie können sie umgestalten oder von vorn neu aufsetzen, beides ist
+recht. Was in beiden Fällen gilt, steht hier. Es dauert fünf Minuten
+und erspart uns beiden viel.
+
+
+Worum es geht
+
+selbst-verkauf.de ist eine Plattform, auf der private Eigentümer ihre
+Immobilie selbst verkaufen, mit echten Maklern im Hintergrund, die man
+dazubuchen kann. Bezahlt wird ein Festpreis statt einer Provision.
+
+Die Zielgruppe sind private Eigentümer in Deutschland, oft über fünfzig,
+oft ohne Vorerfahrung, und fast immer unsicher. Für viele ist es der
+größte Verkauf ihres Lebens.
+
+Das ist der Maßstab für jede Entscheidung: Würde ein Eigentümer, der
+noch nie etwas verkauft hat und gerade zögert, dieser Seite glauben?
+
+Der Ton ist deshalb ruhig, sachlich und ehrlich. Die Seite soll
+Vertrauen schaffen, nicht überreden.
+
+
+Loslegen
+
+  npm install
+  cp .env.local.example .env.local
+  npm run dev
+
+In der .env.local setzen Sie PASSWORD_PROTECT=false, sonst antwortet
+der Entwicklungsserver nur mit einem Anmeldefenster. Die übrigen Werte
+brauchen Sie für die Gestaltung nicht. Echte Schlüssel bekommen Sie bei
+Bedarf von Randolph, niemals über Chat und niemals in eine Datei, die
+committet wird.
+
+Die Seite läuft dann auf http://localhost:3010.
+
+Verweise auf /konto und /admin laufen hier ins Leere. Das ist richtig
+so, im Betrieb leitet eine Weiche sie auf die App-Adresse.
+
+
+Drei Dinge, die keine Dateien sind
+
+Erstens, allowScripts in der package.json. npm führt
+Installationsskripte von Paketen nur aus, wenn sie dort mit genauer
+Versionsnummer freigegeben sind. sharp steht drin, weil es beim
+Installieren seine Bildbibliothek einrichtet. Die Warnung bei
+npm install, dass esbuild, fsevents und unrs-resolver nicht
+freigegeben sind, ist bei uns der Normalzustand und kein Fehler,
+diese drei laufen ohne ihre Skripte. Was für Sie daraus folgt:
+Löschen Sie das Feld nicht. Und wer ein Paket aktualisiert, das ein
+Installationsskript braucht, sharp zum Beispiel, muss den Eintrag mit
+der neuen Versionsnummer nachziehen, sonst wird das Skript still
+übersprungen und das Paket ist kaputt, ohne dass ein Fehler erscheint.
+
+Zweitens, die Stripe-Testschlüssel. Damit die Kasse das
+Zahlungsformular zeigt, brauchen Sie zwei Werte in der .env.local:
+STRIPE_SECRET_KEY, beginnt mit sk_test_, und
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, beginnt mit pk_test_. Beide
+bekommen Sie von Randolph, es sind die Schlüssel aus dem Testmodus
+unseres Stripe-Kontos. Niemals Schlüssel verwenden, die mit sk_live_
+oder pk_live_ beginnen, und keiner der Werte kommt je in eine Datei,
+die committet wird. Ohne die beiden Werte zeigt die Kasse den
+Bestellweg per E-Mail, das ist gewollt und kein Fehler.
+
+Drittens, die Anmeldung und app.selbst-verkauf.de. Die Anmeldung
+liegt in einem Cookie, das nur für die Adresse gilt, auf der sie
+stattgefunden hat, und im Betrieb ist das app.selbst-verkauf.de, wo
+Login und Konto liegen. Die Hauptseite selbst-verkauf.de sieht dieses
+Cookie nicht und zeigt im Betrieb deshalb immer den abgemeldeten
+Kopf; lokal läuft beides auf localhost:3010, darum wirkt die
+Anmeldung bei Ihnen auch auf den öffentlichen Seiten. Was Sie daran
+nicht verändern dürfen: kein Domain-Attribut an Cookies hängen, um
+die Sitzung auf die Hauptdomain zu heben, die Cookie-Lesart in
+components/layout/HeaderAnmeldung.tsx und die Route /api/ich nicht
+anfassen, und der Anmelde-Link bleibt /login, denn im Betrieb trägt
+die Weiche ihn auf die App-Adresse.
+
+
+Die Regeln des Hauses
+
+Diese Punkte sind nicht Geschmack, sondern verbindlich. Sie sind alle
+aus echten Fehlern entstanden.
+
+Keine Gedankenstriche in Texten auf der Seite. Weder der kurze noch der
+lange. Punkt, Komma oder ein neuer Satz.
+
+Sie-Form, immer. Auch in Knöpfen, Hinweisen und Fehlermeldungen.
+
+Kein Wettbewerbername taucht irgendwo auf. Nicht im Text, nicht im
+Kode, nicht in einem Kommentar, nicht in einem Dateinamen.
+
+Keine erfundenen Kundenstimmen und keine erfundenen Zahlen. Wo
+Beispieldaten stehen, muss erkennbar sein, dass es Beispiele sind.
+
+Keine echten Adressen, Telefonnummern oder Namen als Platzhalter. Auch
+nicht in Formularfeldern.
+
+Wir sind keine Makler und beraten nicht zum Immobilienverkauf. Das Wort
+Beratung kommt auf der Seite nicht vor.
+
+
+Was nirgends im Text stehen darf
+
+Das ist der wichtigste Abschnitt, gerade wenn Sie neu aufsetzen.
+
+Preise, Paketinhalte, Leistungen, Laufzeiten, Personen und Portalnamen
+schreiben Sie nicht in die Seite. Sie kommen aus config und aus
+site.config.ts, und dieselben Werte benutzt der Anmeldebereich.
+
+Wenn ein Preis an zwei Stellen steht, laufen die beiden Stellen
+irgendwann auseinander, und ein Kunde liest auf der Website etwas
+anderes, als er im Konto bezahlt. Das ist uns bereits passiert.
+
+Wenn Sie einen Wert brauchen, der dort noch nicht steht, sagen Sie
+Bescheid. Wir tragen ihn ein, und Sie lesen ihn aus.
+
+
+Was funktionieren muss, egal wie die Seite aussieht
+
+Diese Adressen müssen erreichbar bleiben, auch nach einem Neuaufbau:
+
+  /                 Startseite
+  /leistungen       Leistungen mit Preisen
+  /team             Die Menschen dahinter
+  /lexikon          Nachschlagewerk
+  /impressum        Pflichtangabe
+  /datenschutz      Pflichtangabe
+  /kasse            Bestellung mit Bezahlung
+  /wunsch-paket     Zusammenstellung eigener Leistungen
+  /o/[kennung]      Die Objektseite eines Verkäufers
+  /expose           Das Exposé eines Objekts
+
+Impressum und Datenschutz müssen von jeder Seite aus in wenigen Klicks
+erreichbar sein. Das ist Pflicht und keine Gestaltungsfrage.
+
+Die Objektseite und das Exposé sind Produktseiten, keine
+Marketingseiten. Dort gelten zusätzliche Regeln, unter anderem: Aus
+diesen Seiten geht nie ein Dokument öffentlich hinaus. Bevor Sie dort
+etwas ändern, fragen Sie nach.
+
+
+Technik, kurz
+
+Next.js mit App Router, TypeScript, Tailwind. Text und Struktur in app
+und components, Logik in lib, feste Werte in config und site.config.ts.
+
+Die öffentliche Seite gibt es nur hell. Der dunkle Modus existiert nur
+im Konto und im Admin. Bauen Sie keine dunkle Fassung für öffentliche
+Seiten.
+
+Schriften liegen lokal im Projekt und werden nicht von Google geladen.
+Das muss so bleiben, auch bei einem Neuaufbau. Wenn Sie eine andere
+Schrift wollen, sagen Sie Bescheid, dann klären wir die Lizenz.
+
+Es gibt eine Datei .browserslistrc, die festlegt, für welche Browser
+gebaut wird. Sie ist bewusst weit gefasst, weil unsere Kunden oft
+ältere Geräte haben. Nicht enger stellen.
+
+
+Neue Pakete
+
+Nichts wird ohne Freigabe installiert. Wenn Sie ein Paket brauchen,
+melden Sie es vorher mit Name, Lizenz, Gewicht und Zweck.
+
+Copyleft ist ausgeschlossen, also kein GPL, AGPL, LGPL oder SSPL.
+Erlaubt sind MIT, Apache-2.0, BSD, ISC und OFL. Der Grund steht in
+LIZENZEN.md, und jedes neue Paket gehört dort eingetragen.
+
+Das gilt auch für Baukästen und Vorlagen. Ein fertiges Theme bringt
+oft ein Dutzend Pakete mit, und eines davon reicht, um uns die Lizenz
+zu verderben.
+
+
+Vier technische Auflagen
+
+Nichts darf im Server-HTML unsichtbar starten. Wir hatten den Fall,
+dass ganze Abschnitte mit Deckkraft null ausgeliefert wurden und ohne
+JavaScript unsichtbar blieben. Benutzen Sie lib/einblenden.ts, dort ist
+das Muster gelöst.
+
+Wer im System weniger Bewegung eingestellt hat, sieht keine. Jede
+Animation, die von selbst läuft, muss prefers-reduced-motion beachten.
+Eine Bewegung, die auf ein Klicken oder Darüberfahren antwortet, darf
+bleiben.
+
+Die Seite darf sich seitlich nicht schieben lassen. Kein Element darf
+breiter sein als das Fenster. Wir messen das von 320 bis 2560 Pixeln.
+Safari zählt dabei anders als Chrome, prüfen Sie beide.
+
+Bilder: geänderter Inhalt bekommt einen neuen Dateinamen. Die
+Bildordner werden ein Jahr lang unveränderlich ausgeliefert. Wer eine
+Datei unter gleichem Namen austauscht, sitzt beim Besucher ein Jahr auf
+dem alten Bild. Und nichts wird schwerer ausgeliefert als vorher.
+
+
+Kein Ladehinweis ohne Zeitgrenze
+
+Wenn etwas lädt, braucht es eine Grenze und einen Ausweg. Ein
+Ladehinweis, der ewig steht, ist dasselbe wie eine leere Fläche, nur
+höflicher. Und ein Fehler, der stillschweigend verschluckt wird, ist
+das Schlimmste von beidem: Der Besucher sieht nichts und erfährt nicht,
+warum.
+
+
+Wie wir arbeiten
+
+Zeigen, bevor es festgeschrieben wird. Größere Änderungen legen Sie
+bitte als Bild vor, in mehreren Breiten, bevor sie in den Hauptstand
+gehen.
+
+Sagen Sie, was Sie nicht beweisen konnten. Wenn Sie etwas nur auf einem
+Bildschirm oder in einem Browser geprüft haben, schreiben Sie das dazu.
+Eine Messung gilt nur für das, worauf sie gelaufen ist.
+
+Lieber melden als raten. Wenn etwas unlogisch aussieht, ist es meistens
+ein echter Fehler und kein Missverständnis. Melden Sie ihn, auch wenn
+Sie ihn nicht beheben.
+
+
+Wenn Sie neu aufsetzen
+
+Diese Dateien nehmen Sie in jedem Fall mit, auch in ein leeres Projekt:
+
+  config/           alle festen Werte
+  site.config.ts    Farben, Schriften, Domain, Preise
+  lib/einblenden.ts das Muster für Einblendungen
+  proxy.ts          Passwortschutz, Rollenprüfung und Weiche
+  .browserslistrc   der Browser-Rahmen
+  LIZENZEN.md       der Nachweis, laufend zu ergänzen
+  public/           Bilder, Marke, Schriften
+
+Und sagen Sie vorher Bescheid, damit wir wissen, worauf wir uns
+einstellen. Ein Neuaufbau ist recht, aber wir müssen ihn am Ende in den
+Hauptstand übernehmen, und das geht leichter, wenn wir es früh wissen.
+
+
+Die Variablen, ohne die ein Neuaufbau scheitert
+
+Das ist der Punkt, an dem ein Neuaufbau am ehesten scheitert: Man baut
+eine schöne Seite und merkt erst beim Ausrollen, dass sie ohne eine
+Variable nicht läuft, die niemand erwähnt hat. Diese Namen nehmen Sie
+deshalb in jedes neue Projekt mit, von Anfang an:
+
+PASSWORD_PROTECT
+  Der Vorlaunch-Schutz ist absichtlich so gebaut, dass er AN ist,
+  solange nicht wörtlich false dasteht. Fehlt die Variable, liefert
+  der Server auf jede Anfrage nur den Satz "Anmeldung erforderlich."
+  und keine einzige Seite erscheint. Lokal gehört false gesetzt, im
+  Betrieb steht der Schalter bis zum Start auf true.
+
+NEXT_PUBLIC_SUPABASE_URL und NEXT_PUBLIC_SUPABASE_ANON_KEY
+  Adresse und öffentlicher Schlüssel der Datenbank samt Anmeldung.
+  Fehlen sie, startet die Seite trotzdem, und genau das macht es
+  gefährlich: Die festen Seiten sehen fertig aus, aber die
+  Objektseite, das Exposé und alle Termin-, Gebots- und
+  Nachweis-Links zeigen für echte Objekte nur "Diese Seite gibt es
+  nicht", ohne jede Fehlermeldung. Die Anmelde-Anzeige im Kopf bleibt
+  dauerhaft abgemeldet.
+
+SUPABASE_SERVICE_ROLE_KEY
+  Der Server-Schlüssel derselben Datenbank, streng geheim, er umgeht
+  alle Zugriffsregeln. Fehlt er, gilt dasselbe stumme Bild: "Diese
+  Seite gibt es nicht" auf allen Objekt- und Token-Seiten, obwohl es
+  die Objekte gibt.
+
+SITE_URL
+  Die Basis aller Links, die an Dritte hinausgehen. Ohne den Wert
+  fällt die Seite auf die feste Betriebs-Adresse aus site.config.ts
+  zurück, lokal erzeugte Links zeigten dann auf die echte Domain.
+  Lokal gehört sie auf http://localhost:3010.
+
+Diese Aussagen sind nicht hergeleitet, sondern ausprobiert, am
+01.09.2026 in genau diesem Ordner: Variable entfernt, Server
+gestartet, Seite aufgerufen, das beschriebene Verhalten gesehen.
+
+Im Betrieb, nicht bei Ihnen lokal, kommen INSTANZ_ROLLE und APP_URL
+dazu. Sie steuern die Weiche zwischen Hauptseite und App-Adresse, und
+eine Anwendung, die APP_URL kennt, aber ihre eigene Rolle nicht,
+liefert absichtlich gar nichts aus. Das richtet der Betrieb ein,
+nicht Sie, es darf nur bei einem Neuaufbau nicht verloren gehen:
+proxy.ts muss mitkommen.
+
+
+Wo Sie nachschlagen
+
+LIZENZEN.md für Schriften, Bilder und Bibliotheken.
+DATEILISTE.txt für den Umfang dieses Ordners.
+.env.local.example für die Variablen und was sie bedeuten.
+
+Bei allem anderen fragen Sie Randolph oder Johannes.

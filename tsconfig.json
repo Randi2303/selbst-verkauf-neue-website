@@ -1,0 +1,58 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts",
+    ".pruefung/**/*.ts",
+    ".pruefung/**/*.mts",
+    ".bau-heute/types/**/*.ts",
+    ".bau-heute/dev/types/**/*.ts",
+    ".bau-weit/types/**/*.ts",
+    ".bau-weit/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".pruefung/anrechnung-probe.mts",
+    ".pruefung/r15-checkliste.mts",
+    ".pruefung/r17-nachweis-echt.mts",
+    ".pruefung/r17-vorlagen-attrappe.ts",
+    ".pruefung/r18-checkliste-rhythmus.mts",
+    ".pruefung/r18-checkliste.mts",
+    ".pruefung/r19-gegenprobe-zwei.mts",
+    ".pruefung/r19-schwankung.mts",
+    ".pruefung/r19-seed-probe.mts",
+    ".pruefung/r20-verweise.mts"
+  ]
+}

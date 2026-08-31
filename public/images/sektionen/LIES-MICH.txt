@@ -1,0 +1,25 @@
+SEKTIONS-FOTOS (werden ausgeliefert)
+
+Fotos, die in einer Sektion der öffentlichen Seiten stehen. Anders als
+team/ und makler/ (Porträts) und mockups/ (Bildschirm-Ausschnitte) sind
+das Stimmungsbilder.
+
+ABLAGE, Stand 26.08.2026: Das Original gehört NICHT hierher, sondern
+nach assets/foto-quellen/. Hier liegt nur die fertige, ausgelieferte
+Fassung als WebP. Erzeugt wird sie beim Einbau.
+
+  abschluss-erster-schritt-v1.webp
+    Abschluss-Sektion der Startseite, rechte Spalte
+    (components/sections/FinalCta.tsx). 4:3 quer, mindestens
+    1400 auf 1050 Pixel. Ersetzt das letzte fremde Foto.
+
+NAMENSREGEL (Haus, seit Runde 31): Geänderter Bildinhalt bekommt einen
+NEUEN Dateinamen, also v1, v2, v3 und so weiter. Grund: Auf
+public/images liegt eine Kopfzeile mit einem Jahr Haltbarkeit und
+"immutable"; wer eine Datei unter demselben Namen überschreibt, brennt
+die alte Fassung bis zu einem Jahr in Browsern und im CDN fest.
+
+BEIM EINBAU NICHT VERGESSEN: Dieser Ordner braucht eine eigene Zeile in
+der headers-Liste von next.config.ts, sonst greift die Haltbarkeits-
+Kopfzeile hier nicht (die vier bestehenden Zeilen nennen mockups,
+unterschriften, team und makler namentlich).

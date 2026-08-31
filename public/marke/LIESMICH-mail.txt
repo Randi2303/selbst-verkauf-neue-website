@@ -1,0 +1,4 @@
+wortmarke-mail-*.png werden von scripts/mail-logo-erzeugen.mjs erzeugt.
+Nicht von Hand bearbeiten. Die helle Flaeche steckt bewusst in der Datei,
+damit die Wortmarke auch dann lesbar bleibt, wenn ein Mail-Programm die
+Dunkelmodus-Regeln ignoriert und die Mail selbst umfaerbt.
